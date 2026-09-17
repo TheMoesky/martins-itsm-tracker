@@ -144,3 +144,4 @@ vite.config.ts.timestamp-*
 
 #Database files
 itsm.db
+test.db
