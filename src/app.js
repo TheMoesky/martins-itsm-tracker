@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
     res.send('ITSM API is running');
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
     console.error(err);
     res.status(500).json({ error: err.message });
 });
