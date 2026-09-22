@@ -6,7 +6,7 @@ app.use(express.json());
 app.use('/tickets', ticketsRouter);
 
 app.get('/', (req, res) => {
-    res.send('ITSM API is running');
+    res.send('ITSM API is running with CI/CD pipeline!');
 });
 
 app.use((err, req, res, _next) => {
