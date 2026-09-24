@@ -13,4 +13,5 @@ export default defineConfig([
     },
   },
   { files: ["tests/**/*.js"], languageOptions: { globals: globals.jest } },
+  { files: ["public/**/*.js"], languageOptions: { globals: globals.browser } },
 ]);

@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
+function withSlaStatus(ticket) {
+    if (!ticket.sla_due_at || ticket.status === 'closed') {
+        return { ...ticket, sla_status: 'n/a' };
+    }
+    const dueDate = new Date(ticket.sla_due_at);
+    const now = new Date();
+    const sla_status = now > dueDate ? 'breached' : 'on_track';
+    return { ...ticket, sla_status };
+}
+
 // CREATE
 router.post('/', (req, res) => {
     const { title, description, priority, category, assignee, sla_due_at } = req.body;
@@ -20,14 +30,21 @@ router.post('/', (req, res) => {
 // READ all
 router.get('/', (req, res) => {
     const tickets = db.prepare('SELECT * FROM tickets ORDER BY created_at DESC').all();
-    res.json(tickets);
+    res.json(tickets.map(withSlaStatus));
 });
 
 // READ one
 router.get('/:id', (req, res) => {
     const ticket = db.prepare('SELECT * FROM tickets WHERE id = ?').get(req.params.id);
     if (!ticket) return res.status(404).json({ error: 'not found' });
-    res.json(ticket);
+    res.json(withSlaStatus(ticket));
+});
+
+// List only tickets currently breaching SLA
+router.get('/status/breaches', (req, res) => {
+    const tickets = db.prepare(`SELECT * FROM tickets WHERE status != 'closed'`).all();
+    const breached = tickets.map(withSlaStatus).filter(t => t.sla_status === 'breached');
+    res.json(breached);
 });
 
 // UPDATE
