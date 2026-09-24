@@ -146,4 +146,5 @@ vite.config.ts.timestamp-*
 itsm.db
 test.db
 
-#Hi Allie
+#Claude Code
+.claude/

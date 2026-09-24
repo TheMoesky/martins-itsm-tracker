@@ -62,12 +62,156 @@
             color: #555;
             margin-bottom: 1rem;
         }
+
+        .panel {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: #fafafa;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .form-grid label {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.85rem;
+            color: #333;
+            gap: 0.25rem;
+        }
+
+        .form-grid input,
+        .form-grid select,
+        .form-grid textarea {
+            font: inherit;
+            padding: 0.4rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-grid .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-actions {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        button {
+            font: inherit;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+        }
+
+        button.primary {
+            background: #2ecc71;
+            color: white;
+            border-color: #2ecc71;
+        }
+
+        button.primary:hover {
+            background: #29b765;
+        }
+
+        button.danger {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        button.danger:hover {
+            background: #d44333;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .actions-cell button {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #form-error {
+            color: #e74c3c;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 
 <body>
     <h1>ITSM Ticket Dashboard</h1>
     <div id="summary">Loading tickets...</div>
+
+    <div class="panel">
+        <h2 id="form-title">New Ticket</h2>
+        <form id="ticket-form">
+            <input type="hidden" id="ticket-id">
+            <div class="form-grid">
+                <label class="full-width">
+                    Title
+                    <input type="text" id="field-title" required>
+                </label>
+                <label class="full-width">
+                    Description
+                    <textarea id="field-description" rows="2"></textarea>
+                </label>
+                <label>
+                    Priority
+                    <select id="field-priority">
+                        <option value="low">low</option>
+                        <option value="medium" selected>medium</option>
+                        <option value="high">high</option>
+                        <option value="critical">critical</option>
+                    </select>
+                </label>
+                <label>
+                    Category
+                    <input type="text" id="field-category">
+                </label>
+                <label>
+                    Assignee
+                    <input type="text" id="field-assignee">
+                </label>
+                <label>
+                    SLA Due Date
+                    <input type="datetime-local" id="field-sla-due-at">
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="primary" id="form-submit">Create Ticket</button>
+                <button type="button" id="form-cancel" class="hidden">Cancel</button>
+            </div>
+            <div id="form-error"></div>
+        </form>
+    </div>
+
     <table id="ticket-table">
         <thead>
             <tr>
@@ -77,6 +221,7 @@
                 <th>Priority</th>
                 <th>SLA Due</th>
                 <th>SLA Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody id="ticket-body"></tbody>
